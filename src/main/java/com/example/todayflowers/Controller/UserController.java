@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/jpa")
+//@RequestMapping("/jpa")
 public class UserController {
 
     @Autowired
