@@ -101,48 +101,48 @@
                     </image>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.experimental</groupId>-->
-<!--                <artifactId>spring-aot-maven-plugin</artifactId>-->
-<!--                <version>${spring-native.version}</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>test-generate</id>-->
-<!--                        <goals>-->
-<!--                            <goal>test-generate</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>generate</id>-->
-<!--                        <goals>-->
-<!--                            <goal>generate</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-          <!-- main추가           -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <groupId>org.springframework.experimental</groupId>
+                <artifactId>spring-aot-maven-plugin</artifactId>
+                <version>${spring-native.version}</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>test-generate</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>test-generate</goal>
                         </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>TodayFlowersApplication</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
-         <!--            -->
+<!--          &lt;!&ndash; main추가           &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-shade-plugin</artifactId>-->
+<!--                <version>2.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>shade</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <transformers>-->
+<!--                                <transformer-->
+<!--                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+<!--                                    <mainClass>TodayFlowersApplication</mainClass>-->
+<!--                                </transformer>-->
+<!--                            </transformers>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--         &lt;!&ndash;            &ndash;&gt;-->
         </plugins>
     </build>
 
@@ -174,37 +174,37 @@
                 <repackage.classifier>exec</repackage.classifier>
                 <native-buildtools.version>0.9.3</native-buildtools.version>
             </properties>
-<!--            <dependencies>-->
-<!--                <dependency>-->
-<!--                    <groupId>org.graalvm.buildtools</groupId>-->
-<!--                    <artifactId>junit-platform-native</artifactId>-->
-<!--                    <version>${native-buildtools.version}</version>-->
-<!--                    <scope>test</scope>-->
-<!--                </dependency>-->
-<!--            </dependencies>-->
+            <dependencies>
+                <dependency>
+                    <groupId>org.graalvm.buildtools</groupId>
+                    <artifactId>junit-platform-native</artifactId>
+                    <version>${native-buildtools.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
-<!--                    <plugin>-->
-<!--                        <groupId>org.graalvm.buildtools</groupId>-->
-<!--                        <artifactId>native-maven-plugin</artifactId>-->
-<!--                        <version>${native-buildtools.version}</version>-->
-<!--                        <executions>-->
-<!--                            <execution>-->
-<!--                                <id>test-native</id>-->
-<!--                                <phase>test</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>test</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                            <execution>-->
-<!--                                <id>build-native</id>-->
-<!--                                <phase>package</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>build</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
-<!--                        </executions>-->
-<!--                    </plugin>-->
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native-buildtools.version}</version>
+                        <executions>
+                            <execution>
+                                <id>test-native</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>build-native</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
