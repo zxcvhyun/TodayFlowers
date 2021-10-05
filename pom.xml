@@ -101,6 +101,21 @@
                     </image>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>TodayFlowersApplication</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <addExtensions>true</addExtensions>
+                            <packageName>com.example.todayflowers</packageName>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
 <!--            <plugin>-->
 <!--                <groupId>org.springframework.experimental</groupId>-->
 <!--                <artifactId>spring-aot-maven-plugin</artifactId>-->
