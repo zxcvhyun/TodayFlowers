@@ -1,4 +1,4 @@
-package com.example.todayflowers.Controller;
+package com.example.todayflowers.controller;
 
 import com.example.todayflowers.User.User;
 import com.example.todayflowers.User.UserDaoService;
@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

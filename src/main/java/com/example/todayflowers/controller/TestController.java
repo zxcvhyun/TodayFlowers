@@ -1,4 +1,4 @@
-package com.example.todayflowers.Controller;
+package com.example.todayflowers.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
