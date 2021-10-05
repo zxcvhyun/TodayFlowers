@@ -4,8 +4,12 @@ import com.example.todayflowers.User.User;
 import com.example.todayflowers.User.UserDaoService;
 import com.example.todayflowers.User.UserNotFoundException;
 import com.example.todayflowers.User.UserRepository;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,18 +32,32 @@ public class UserController {
     public UserController(UserDaoService service){this.service = service;}
 
     @GetMapping("/users")
-    public List<User> retriveAllUsers() {
-        return userRepository.findAll();
+    public MappingJacksonValue retriveAllUsers() {
+        List<User> users = userRepository.findAll();
+        //화면에 보여지는 값 필터링
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag" ,"emailflag");
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+
+        MappingJacksonValue mapping = new MappingJacksonValue(users);
+        mapping.setFilters(filters);
+        return mapping;
     }
 
     @GetMapping("/users/{id}")
-    public User retriveUser(@PathVariable Integer id) {
+    public MappingJacksonValue retriveUser(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
 
         if (!user.isPresent()) {
             throw new UserNotFoundException(String.format("ID[%s} Not Found", id));
         }
-        return user.get();
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag" ,"emailflag");
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+
+        MappingJacksonValue mapping = new MappingJacksonValue(user.get());
+        mapping.setFilters(filters);
+
+        return mapping;
     }
 
     @PostMapping("/user")

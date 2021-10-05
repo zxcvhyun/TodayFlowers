@@ -1,5 +1,6 @@
 package com.example.todayflowers.User;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonFilter("UserInfo")
 public class User {
     @Id
     private Integer id;
@@ -26,5 +28,5 @@ public class User {
     private String address;
     private String joindate;
     private char smsflag;
-
+    private char emailflag;
 }
