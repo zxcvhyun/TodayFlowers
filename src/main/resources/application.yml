@@ -1,5 +1,8 @@
 server:
   port: 8088
+  error:
+    include-message: always
+    include-binding-errors: always
 
 logging:
   level:
@@ -9,6 +12,7 @@ logging:
 spring:
   messages:
     basename: messages
+
 
 
   #-- Database 설정 (Failed to determine a suitable driver class 에러는 이부분을 설정 해줘야 함)

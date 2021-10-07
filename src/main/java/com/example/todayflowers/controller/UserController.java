@@ -60,12 +60,16 @@ public class UserController {
         return mapping;
     }
 
-    @PostMapping("/user")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        if (userRepository.findByUseremail(user.getUseremail()) != null) {
-            throw new UserNotFoundException(String.format("Useremail[%s} 이미 존재하는 이메일 입니다.", user.getUseremail()));
-        }else {
+    @GetMapping("/user/{useremail}/exists")
+    public ResponseEntity<Boolean> chekEmailDuplicate(@PathVariable String useremail) {
+        return ResponseEntity.ok(service.checkEmailDuplicate(useremail));
+    }
 
+    @PostMapping("/user")
+    public ResponseEntity<Boolean> createUser(@RequestBody User user) {
+        if (!service.checkEmailDuplicate(user.getUseremail())) {
+            return ResponseEntity.ok(service.checkEmailDuplicate(user.getUseremail()));
+        }else{
             Integer maxid = userRepository.getMaxId();
 
             if (maxid != null) {
@@ -85,7 +89,33 @@ public class UserController {
                     .toUri();
             return ResponseEntity.created(location).build();
         }
+//        if (userRepository.findByUseremail(user.getUseremail()) != null) {
+//            throw new UserNotFoundException(String.format("Useremail[%s} 이미 존재하는 이메일 입니다.", user.getUseremail()));
+//        }else {
+//
+//            Integer maxid = userRepository.getMaxId();
+//
+//            if (maxid != null) {
+//                maxid++;
+//            } else {
+//                maxid = 1;
+//            }
+//            user.setId(maxid);
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//            String sysdate = format.format(new Date());
+//            user.setJoindate(sysdate);
+//
+//            User savedUser = userRepository.save(user);
+//            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+//                    .path("/{id}")
+//                    .buildAndExpand(savedUser.getId())
+//                    .toUri();
+//            return ResponseEntity.created(location).build();
+//        }
     }
+
+
+
 
 //    @PutMapping("/updateusers/{id}")
 //    public ResponseEntity<User>  updateUser(@PathVariable(value = "id")Integer userid , @RequestBody User userdetailed ) {
