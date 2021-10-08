@@ -7,6 +7,7 @@ import com.example.todayflowers.User.UserRepository;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -29,13 +30,16 @@ public class UserController {
     private UserRepository userRepository;
 
     private UserDaoService service;
-    public UserController(UserDaoService service){this.service = service;}
+
+    public UserController(UserDaoService service) {
+        this.service = service;
+    }
 
     @GetMapping("/users")
     public MappingJacksonValue retriveAllUsers() {
         List<User> users = userRepository.findAll();
         //화면에 보여지는 값 필터링
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag" ,"emailflag");
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag", "emailflag");
         FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
 
         MappingJacksonValue mapping = new MappingJacksonValue(users);
@@ -51,7 +55,7 @@ public class UserController {
             throw new UserNotFoundException(String.format("ID[%s} Not Found", id));
         }
 
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag" ,"emailflag");
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "useremail", "joindate", "smsflag", "emailflag");
         FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
 
         MappingJacksonValue mapping = new MappingJacksonValue(user.get());
@@ -65,11 +69,11 @@ public class UserController {
         return ResponseEntity.ok(service.checkEmailDuplicate(useremail));
     }
 
-    @PostMapping("/user")
+    @PostMapping("/v1/user")
     public ResponseEntity<Boolean> createUser(@RequestBody User user) {
         if (!service.checkEmailDuplicate(user.getUseremail())) {
             return ResponseEntity.ok(service.checkEmailDuplicate(user.getUseremail()));
-        }else{
+        }else {
             Integer maxid = userRepository.getMaxId();
 
             if (maxid != null) {
@@ -77,6 +81,7 @@ public class UserController {
             } else {
                 maxid = 1;
             }
+
             user.setId(maxid);
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String sysdate = format.format(new Date());
@@ -87,44 +92,42 @@ public class UserController {
                     .path("/{id}")
                     .buildAndExpand(savedUser.getId())
                     .toUri();
+
             return ResponseEntity.created(location).build();
         }
-//        if (userRepository.findByUseremail(user.getUseremail()) != null) {
-//            throw new UserNotFoundException(String.format("Useremail[%s} 이미 존재하는 이메일 입니다.", user.getUseremail()));
-//        }else {
-//
-//            Integer maxid = userRepository.getMaxId();
-//
-//            if (maxid != null) {
-//                maxid++;
-//            } else {
-//                maxid = 1;
-//            }
-//            user.setId(maxid);
-//            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-//            String sysdate = format.format(new Date());
-//            user.setJoindate(sysdate);
-//
-//            User savedUser = userRepository.save(user);
-//            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-//                    .path("/{id}")
-//                    .buildAndExpand(savedUser.getId())
-//                    .toUri();
-//            return ResponseEntity.created(location).build();
-//        }
+    }
+    @PostMapping("/user")
+    public JSONObject joinUser(@RequestBody User user) {
+        JSONObject jsonObject = new JSONObject();
+        if (!service.checkEmailDuplicate(user.getUseremail())) {
+            jsonObject.put("success", false);
+        }else {
+            Integer maxid = userRepository.getMaxId();
+
+            if (maxid != null) {
+                maxid++;
+            } else {
+                maxid = 1;
+            }
+
+            user.setId(maxid);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String sysdate = format.format(new Date());
+            user.setJoindate(sysdate);
+            User savedUser = userRepository.save(user);
+            JSONObject userObject = new JSONObject();
+            jsonObject.put("success", true);
+            userObject.put("useremail",savedUser.getUseremail());
+            userObject.put("password", savedUser.getPassword());
+            userObject.put("hpnumber", savedUser.getHpnumber());
+            userObject.put("address", savedUser.getAddress());
+            userObject.put("joindate", savedUser.getJoindate());
+            userObject.put("smsflag", savedUser.getSmsflag());
+            userObject.put("emailflag", savedUser.getEmailflag());
+            jsonObject.put("user", userObject);
+        }
+        return jsonObject;
+
     }
 
-
-
-
-//    @PutMapping("/updateusers/{id}")
-//    public ResponseEntity<User>  updateUser(@PathVariable(value = "id")Integer userid , @RequestBody User userdetailed ) {
-//        Optional<User> user = userRepository.findById(userid);
-//       // user.setId(userdetailed.getId());
-//       // user.setUseremail(userdetailed.getUseremail());
-//       // final User updatedUser = userRepository.save(user);
-//     //   return ResponseEntity.ok(updatedUser);
-//
-//
-//    }
 }
