@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-//@RequestMapping("/jpa")
 public class UserController {
 
     @Autowired
@@ -69,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok(service.checkEmailDuplicate(useremail));
     }
 
-    @PostMapping("/v1/user")
+    @PostMapping("/v1/user/login")
     public ResponseEntity<Boolean> createUser(@RequestBody User user) {
         if (!service.checkEmailDuplicate(user.getUseremail())) {
             return ResponseEntity.ok(service.checkEmailDuplicate(user.getUseremail()));
@@ -96,7 +95,8 @@ public class UserController {
             return ResponseEntity.created(location).build();
         }
     }
-    @PostMapping("/user")
+
+    @PostMapping("/user/join")
     public JSONObject joinUser(@RequestBody User user) {
         JSONObject jsonObject = new JSONObject();
         if (!service.checkEmailDuplicate(user.getUseremail())) {
@@ -129,5 +129,6 @@ public class UserController {
         return jsonObject;
 
     }
+
 
 }
