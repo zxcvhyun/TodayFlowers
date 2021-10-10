@@ -42,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .formLogin() //로그인 폼은
                                     .loginPage("/user/login") //로그인 페이지를 우리가 만든 페이지로 등록한다.
                                     .loginProcessingUrl("/user/login") //스프링 시큐리티가 해당 주소로 요청오는 로그인을 가로채서 대신 로그인해줌(서비스의 loadUserByName로 알아서)
-                                    .defaultSuccessUrl("/"); //정상일떄
+                                    .defaultSuccessUrl("/")//정상일떄
+                                    .permitAll();
+
         //중복 로그인
         http.sessionManagement()
                 .maximumSessions(1)  //세션 최대 허용 수
