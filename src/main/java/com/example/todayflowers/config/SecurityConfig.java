@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .permitAll() //접근을 허용한다.
                                     .anyRequest() //다른 모든 요청은
                                     .permitAll() //인증이 되야 들어갈 수 있다.
-                                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // - (1)
+
                                 .and()
                                     .formLogin() //로그인 폼은
                                     .loginPage("/user/login") //로그인 페이지를 우리가 만든 페이지로 등록한다.
@@ -58,14 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .maximumSessions(1)  //세션 최대 허용 수
                 .maxSessionsPreventsLogin(false); // false이면 중복 로그인하면 이전 로그인이 풀린다.
     }
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT","DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.addAllowedOrigin("*");
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT","DELETE"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }
