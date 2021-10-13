@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .permitAll() //접근을 허용한다.
                                     .anyRequest() //다른 모든 요청은
                                     .permitAll() //인증이 되야 들어갈 수 있다.
-
+                                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // - (1)
                                 .and()
                                     .formLogin() //로그인 폼은
                                     .loginPage("/user/login") //로그인 페이지를 우리가 만든 페이지로 등록한다.
