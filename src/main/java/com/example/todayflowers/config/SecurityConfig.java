@@ -36,11 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-       http.addFilterBefore(new MyFilter1(), SecurityContextPersistenceFilter.class);
+      // http.addFilterBefore(new MyFilter1(), SecurityContextPersistenceFilter.class);
         http.csrf().disable(); //csrf 토큰 비활성화
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//세션 사용 X
+        http    .addFilter(corsFilter)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//세션 사용 X
                 .and()//인가 요청이 오면
-                .addFilter(corsFilter)
                 .formLogin()
                 .disable()
                 .httpBasic().disable() //
