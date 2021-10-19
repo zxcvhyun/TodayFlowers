@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(corsFilter)
                 .csrf().disable() //csrf 토큰 비활성화
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//세션 사용 X
-                .and()//인가 요청이 오면
+            .and()//인가 요청이 오면
                 .formLogin()
                 .disable()
                 .httpBasic().disable() //
