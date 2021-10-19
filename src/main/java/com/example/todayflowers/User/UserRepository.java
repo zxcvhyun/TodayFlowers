@@ -8,8 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUseremail(String useremail);
+
     @Query(value= "SELECT max(id) FROM User")
     Integer getMaxId();
 
     boolean existsByUseremail(String useremail);
+
+  //  String findByPassword(String username);
 }

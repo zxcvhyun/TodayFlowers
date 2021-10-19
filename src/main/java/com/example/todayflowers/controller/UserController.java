@@ -7,10 +7,12 @@ import com.example.todayflowers.User.UserRepository;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,16 +25,12 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    private UserDaoService service;
-
-    public UserController(UserDaoService service) {
-        this.service = service;
-    }
+    private final UserRepository userRepository;
+    private final UserDaoService service;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/users")
     public MappingJacksonValue retriveAllUsers() {
@@ -111,10 +109,14 @@ public class UserController {
             }
 
             user.setId(maxid);
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String sysdate = format.format(new Date());
             user.setJoindate(sysdate);
+            user.setRoles("ROLE_USER");
             User savedUser = userRepository.save(user);
+
             JSONObject userObject = new JSONObject();
             jsonObject.put("success", true);
             userObject.put("useremail",savedUser.getUseremail());
@@ -124,6 +126,7 @@ public class UserController {
             userObject.put("joindate", savedUser.getJoindate());
             userObject.put("smsflag", savedUser.getSmsflag());
             userObject.put("emailflag", savedUser.getEmailflag());
+            userObject.put("role", savedUser.getRoles());
             jsonObject.put("user", userObject);
         }
         return jsonObject;

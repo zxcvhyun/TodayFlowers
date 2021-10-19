@@ -12,7 +12,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +27,6 @@ public class User {
     private Integer id;
     @Email(message = "올바른 이메일 주소를 입력해주세요.")
     private String useremail;
-    @Size(min = 8)
     private String password;
     @Pattern(regexp = "(01[016789])(\\d{3,4})(\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
     private String hpnumber;
@@ -32,4 +34,12 @@ public class User {
     private String joindate;
     private char smsflag;
     private char emailflag;
+    private String roles;
+
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
 }

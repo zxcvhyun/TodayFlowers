@@ -18,7 +18,7 @@ spring:
   #-- Database 설정 (Failed to determine a suitable driver class 에러는 이부분을 설정 해줘야 함)
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://211.252.26.32:3306/jihyuntest?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://59.14.139.36:3306/jihyuntest?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
     username: cetus
     password: ecclesia8*
 
