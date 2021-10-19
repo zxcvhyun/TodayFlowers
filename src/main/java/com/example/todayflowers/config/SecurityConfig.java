@@ -25,17 +25,18 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
 
+
+//    // 시큐리티가 대신 로그인해주는데 password를 가로채는데
+//    // 해당 password가 뭘로 해쉬화해서 회원가입이 되었는지 알아야
+//    // 같은 해쉬로 암호화해서 DB에 있는 해쉬랑 비교가능
     @Bean
     public BCryptPasswordEncoder encodePWD() {
         return new BCryptPasswordEncoder();
     }
-//    // 시큐리티가 대신 로그인해주는데 password를 가로채는데
-//    // 해당 password가 뭘로 해쉬화해서 회원가입이 되었는지 알아야
-//    // 같은 해쉬로 암호화해서 DB에 있는 해쉬랑 비교가능
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-    //   http.addFilterBefore(new MyFilter1(), SecurityContextPersistenceFilter.class);
+       http.addFilterBefore(new MyFilter1(), SecurityContextPersistenceFilter.class);
         http.csrf().disable(); //csrf 토큰 비활성화
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//세션 사용 X
                 .and()//인가 요청이 오면
