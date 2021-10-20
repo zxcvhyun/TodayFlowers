@@ -1,8 +1,11 @@
 package com.example.todayflowers.config.jwt;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.example.todayflowers.User.User;
 import com.example.todayflowers.config.PrincipalDetail;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 
@@ -19,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
+import com.auth0.jwt.JWT;
+import static org.springframework.security.config.Elements.JWT;
 
 //스프링 시큐리티에서 UsernamePasswordAuthenticationFilter가 있음
 // /login 요청해서 username, password를 포스트로 전송하면
@@ -71,9 +77,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException{
-
         System.out.println("successfulAuthentication 실행됨 : 인증이 완료 되었다는 뜻임 ");
-        super.successfulAuthentication(request, response, chain, authResult);
+
+        PrincipalDetail principalDetail = (PrincipalDetail) authResult.getPrincipal();
+
+        //RSA 방식은 아니고 Hash암호 방식
+        String jwtToken = com.auth0.jwt.JWT.create()
+                .withSubject("토큰")
+                .withExpiresAt(new Date(System.currentTimeMillis() + (60000*30)))
+                .withClaim("id", principalDetail.getUser().getId())
+                .withClaim("useremail", principalDetail.getUser().getUseremail())
+                .sign(Algorithm.HMAC512("token"));
+
+
+        response.addHeader("Authorization", "Bearer " + jwtToken);
+
     }
 
 
