@@ -28,7 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     private final UserDaoService service;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
