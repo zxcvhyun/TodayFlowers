@@ -61,14 +61,14 @@ public class LoginController {
         if (!(userEntity == null)) {
             if (user.getHpnumber().equals(userEntity.getHpnumber())) {
                 message.setStatus(Message.StatusEnum.OK);
-                message.setSuccess("true");
+                message.setSuccess(true);
                 message.setUser(userEntity.getUseremail());
 
             }else {
                 System.out.println(user.getHpnumber());
                 System.out.println(userEntity.getHpnumber());
                 message.setStatus(Message.StatusEnum.BAD_REQUEST);
-                message.setSuccess("false");
+                message.setSuccess(false);
 
             }
         }else {
@@ -86,14 +86,13 @@ public class LoginController {
 //        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 //
 //        User userEntity = userRepository.findByUseremail(user.getUseremail());
-//        if (userEntity.getUseremail().equals(user.getUseremail()) && userEntity.getHpnumber().equals(user.getHpnumber())) {
+//        if (!(userEntity == null) && user.getHpnumber().equals(userEntity.getHpnumber())) {
 //            message.setStatus(Message.StatusEnum.OK);
 //            message.setSuccess("true");
-//
-//            if (user.getPassword() != null) {
-//
-//            }
+//            message.setUser(userEntity.getUseremail());
 //        }
+//
+//
 //
 //
 //    }
