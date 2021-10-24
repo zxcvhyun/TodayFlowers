@@ -5,13 +5,13 @@ import lombok.Data;
 @Data
 public class Message {
     private StatusEnum status;
-    private String  message;
+    private String  success;
     private Object data;
 
     public Message() {
         this.status = StatusEnum.BAD_REQUEST;
         this.data = null;
-        this.message = null;
+        this.success = null;
     }
 
     public enum StatusEnum {
