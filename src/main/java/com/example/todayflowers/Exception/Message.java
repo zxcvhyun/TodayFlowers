@@ -6,11 +6,11 @@ import lombok.Data;
 public class Message {
     private StatusEnum status;
     private String  success;
-    private Object data;
+    private Object user;
 
     public Message() {
         this.status = StatusEnum.BAD_REQUEST;
-        this.data = null;
+        this.user = null;
         this.success = null;
     }
 

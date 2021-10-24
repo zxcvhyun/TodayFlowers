@@ -62,7 +62,7 @@ public class LoginController {
             if (user.getHpnumber().equals(userEntity.getHpnumber())) {
                 message.setStatus(Message.StatusEnum.OK);
                 message.setSuccess("true");
-                message.setData(userEntity.getUseremail());
+                message.setUser(userEntity.getUseremail());
 
             }else {
                 System.out.println(user.getHpnumber());
