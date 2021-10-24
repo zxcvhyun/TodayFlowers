@@ -58,14 +58,24 @@ public class LoginController {
         //String hpnumber = String.valueOf(userRepository.findByHpnumber(user.getHpnumber()));
         User userEntity = userRepository.findByHpnumber(user.getHpnumber());
 
-        if (user.getHpnumber().equals(userEntity.getHpnumber())) {
-            message.setStatus(Message.StatusEnum.OK);
-            message.setSuccess("true");
-            message.setData(userEntity.getUseremail());
+        if (!(userEntity == null)) {
+            if (user.getHpnumber().equals(userEntity.getHpnumber())) {
+                message.setStatus(Message.StatusEnum.OK);
+                message.setSuccess("true");
+                message.setData(userEntity.getUseremail());
+
+            }else {
+                System.out.println(user.getHpnumber());
+                System.out.println(userEntity.getHpnumber());
+                message.setStatus(Message.StatusEnum.BAD_REQUEST);
+                message.setSuccess("false");
+
+            }
         }else {
             message.setStatus(Message.StatusEnum.BAD_REQUEST);
             message.setSuccess("false");
         }
+
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
@@ -78,7 +88,7 @@ public class LoginController {
 //        User userEntity = userRepository.findByUseremail(user.getUseremail());
 //        if (userEntity.getUseremail().equals(user.getUseremail()) && userEntity.getHpnumber().equals(user.getHpnumber())) {
 //            message.setStatus(Message.StatusEnum.OK);
-//            message.setMessage("true");
+//            message.setSuccess("true");
 //
 //            if (user.getPassword() != null) {
 //
