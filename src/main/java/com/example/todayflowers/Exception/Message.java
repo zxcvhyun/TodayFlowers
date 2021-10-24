@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Message {
     private StatusEnum status;
-    private String  success;
+    private Object  success;
     private Object user;
 
     public Message() {
