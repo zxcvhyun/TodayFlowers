@@ -1,21 +1,17 @@
 package com.example.todayflowers.config;
 
 
+import com.example.todayflowers.User.UserRepository;
 import com.example.todayflowers.config.jwt.JwtAuthenticationFilter;
-import com.example.todayflowers.filter.MyFilter1;
+import com.example.todayflowers.config.jwt.*;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.filter.CorsFilter;
 
 
@@ -24,8 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
-
-
+    private final UserRepository userRepository;
 //    // 시큐리티가 대신 로그인해주는데 password를 가로채는데
 //    // 해당 password가 뭘로 해쉬화해서 회원가입이 되었는지 알아야
 //    // 같은 해쉬로 암호화해서 DB에 있는 해쉬랑 비교가능
@@ -45,11 +40,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .disable()
                 .httpBasic().disable() //
+
                 .addFilter(new JwtAuthenticationFilter(authenticationManager())) //AuthenticationManger(파라미터)
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(),userRepository))
                 .authorizeRequests()
-                .antMatchers("/**")
+                .antMatchers("/login")
                 .permitAll()
-                //.access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/user/**")
+                //.permitAll()
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/manager/**")
                 .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
                 .antMatchers("/admin/**")

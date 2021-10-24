@@ -90,7 +90,6 @@ public class UserController {
                     .path("/{id}")
                     .buildAndExpand(savedUser.getId())
                     .toUri();
-
             return ResponseEntity.created(location).build();
         }
     }
