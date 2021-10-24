@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findByUseremail(String useremail);
 
-    User findByHpnumber(String hpnumber);
+    User findByPhnumber(String phnumber);
 
     @Query(value= "SELECT max(id) FROM User")
     Integer getMaxId();

@@ -58,17 +58,17 @@ public class LoginController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         //String hpnumber = String.valueOf(userRepository.findByHpnumber(user.getHpnumber()));
-        User userEntity = userRepository.findByHpnumber(user.getHpnumber());
+        User userEntity = userRepository.findByPhnumber(user.getPhnumber());
 
         if (!(userEntity == null)) {
-            if (user.getHpnumber().equals(userEntity.getHpnumber())) {
+            if (user.getPhnumber().equals(userEntity.getPhnumber())) {
                 message.setStatus(Message.StatusEnum.OK);
                 message.setSuccess(true);
                 message.setUser(userEntity.getUseremail());
 
             }else {
-                System.out.println(user.getHpnumber());
-                System.out.println(userEntity.getHpnumber());
+                System.out.println(user.getPhnumber());
+                System.out.println(userEntity.getPhnumber());
                 message.setStatus(Message.StatusEnum.NO_CONTENT);
                 message.setSuccess(false);
 
@@ -89,7 +89,7 @@ public class LoginController {
         User userEntity = userRepository.findByUseremail(user.getUseremail());
 
         if (!(userEntity == null)) {
-            if (userEntity.getUseremail().equals(user.getUseremail()) && userEntity.getHpnumber().equals(user.getHpnumber())) {
+            if (userEntity.getUseremail().equals(user.getUseremail()) && userEntity.getPhnumber().equals(user.getPhnumber())) {
                 message.setStatus(Message.StatusEnum.OK);
                 message.setSuccess(true);
             }else {
@@ -107,7 +107,7 @@ public class LoginController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
-        if (user.getUseremail() != null) {
+//        if (user.getUseremail() != null) {
             String password = bCryptPasswordEncoder.encode(user.getPassword());
             User updateUser = userDaoService.update(user.getUseremail(), password);
             System.out.println("updateUser " + updateUser);
@@ -121,7 +121,7 @@ public class LoginController {
                 message.setStatus(Message.StatusEnum.OK);
                 message.setSuccess(true);
             }
-        }
+        //}
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }

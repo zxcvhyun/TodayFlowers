@@ -34,6 +34,15 @@ public class UserDaoService {
         return null;
     }
 
+    public User findUser(String useremail) {
+        User userEntity = userRepository.findByUseremail(useremail);
+        if (userEntity != null) {
+            System.out.println("findUser: " + userEntity);
+            System.out.println(userEntity.getPassword());
+            return userEntity;
+        }
+        return null;
+    }
 
     public User update(String useremail, String password) {
         User userEntity = userRepository.findByUseremail(useremail);
@@ -41,6 +50,7 @@ public class UserDaoService {
         if (userEntity != null) {
             System.out.println("UserEntity: " + userEntity);
             userEntity.setPassword(password);
+            userRepository.save(userEntity);
             System.out.println(userEntity.getPassword());
             return userEntity;
         }

@@ -1,5 +1,6 @@
 package com.example.todayflowers.controller;
 
+import com.example.todayflowers.Exception.Message;
 import com.example.todayflowers.User.User;
 import com.example.todayflowers.User.UserDaoService;
 import com.example.todayflowers.User.UserNotFoundException;
@@ -71,7 +72,7 @@ public class UserController {
     public ResponseEntity<Boolean> createUser(@RequestBody User user) {
         if (!service.checkEmailDuplicate(user.getUseremail())) {
             return ResponseEntity.ok(service.checkEmailDuplicate(user.getUseremail()));
-        }else {
+        } else {
             Integer maxid = userRepository.getMaxId();
 
             if (maxid != null) {
@@ -99,7 +100,7 @@ public class UserController {
         JSONObject jsonObject = new JSONObject();
         if (!service.checkEmailDuplicate(user.getUseremail())) {
             jsonObject.put("success", false);
-        }else {
+        } else {
             Integer maxid = userRepository.getMaxId();
 
             if (maxid != null) {
@@ -119,9 +120,9 @@ public class UserController {
 
             JSONObject userObject = new JSONObject();
             jsonObject.put("success", true);
-            userObject.put("useremail",savedUser.getUseremail());
+            userObject.put("useremail", savedUser.getUseremail());
             userObject.put("password", savedUser.getPassword());
-            userObject.put("hpnumber", savedUser.getHpnumber());
+            userObject.put("hpnumber", savedUser.getPhnumber());
             userObject.put("address", savedUser.getAddress());
             userObject.put("joindate", savedUser.getJoindate());
             userObject.put("smsflag", savedUser.getSmsflag());
