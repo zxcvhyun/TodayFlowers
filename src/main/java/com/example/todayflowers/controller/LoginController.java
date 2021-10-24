@@ -31,6 +31,8 @@ import java.util.Optional;
 public class LoginController {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserDaoService userDaoService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/user/user")
@@ -50,7 +52,7 @@ public class LoginController {
         return "admin";
     }
 
-    @PostMapping("/login/email/search")
+    @PostMapping("/email/search")
     public ResponseEntity<Message> searchEmail(@RequestBody User user) {
         Message message = new Message();
         HttpHeaders headers = new HttpHeaders();
@@ -67,34 +69,60 @@ public class LoginController {
             }else {
                 System.out.println(user.getHpnumber());
                 System.out.println(userEntity.getHpnumber());
-                message.setStatus(Message.StatusEnum.BAD_REQUEST);
+                message.setStatus(Message.StatusEnum.NO_CONTENT);
                 message.setSuccess(false);
 
             }
         }else {
-            message.setStatus(Message.StatusEnum.BAD_REQUEST);
-            message.setSuccess("false");
+            message.setStatus(Message.StatusEnum.NO_CONTENT);
+            message.setSuccess(false);
         }
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
-//    @PostMapping("/login/password/search")
-//    public ResponseEntity<Message> searchPassword(@RequestBody User user) {
-//        Message message = new Message();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//
-//        User userEntity = userRepository.findByUseremail(user.getUseremail());
-//        if (!(userEntity == null) && user.getHpnumber().equals(userEntity.getHpnumber())) {
-//            message.setStatus(Message.StatusEnum.OK);
-//            message.setSuccess("true");
-//            message.setUser(userEntity.getUseremail());
-//        }
-//
-//
-//
-//
-//    }
+    @PostMapping("/password/search")
+    public ResponseEntity<Message> searchPassword(@RequestBody User user) {
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        User userEntity = userRepository.findByUseremail(user.getUseremail());
 
-}
+        if (!(userEntity == null)) {
+            if (userEntity.getUseremail().equals(user.getUseremail()) && userEntity.getHpnumber().equals(user.getHpnumber())) {
+                message.setStatus(Message.StatusEnum.OK);
+                message.setSuccess(true);
+            }else {
+                System.out.println("아이디, 핸드폰 번호가 다름");
+                message.setStatus(Message.StatusEnum.NO_CONTENT);
+                message.setSuccess(false);
+            }
+        }
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @PostMapping("/password/update")
+    public ResponseEntity<Message> updatePassword(@RequestBody User user) {
+        Message message = new Message();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        if (user.getUseremail() != null) {
+            String password = bCryptPasswordEncoder.encode(user.getPassword());
+            User updateUser = userDaoService.update(user.getUseremail(), password);
+            System.out.println("updateUser " + updateUser);
+
+            if (updateUser == null) {
+                System.out.println("아이디 없음!");
+                message.setStatus(Message.StatusEnum.NO_CONTENT);
+                message.setSuccess(false);
+            }else{
+                System.out.println("업데이트 성공");
+                message.setStatus(Message.StatusEnum.OK);
+                message.setSuccess(true);
+            }
+        }
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+ }
