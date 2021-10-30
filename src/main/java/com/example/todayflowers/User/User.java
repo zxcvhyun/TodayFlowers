@@ -32,8 +32,8 @@ public class User {
     private String phnumber;
     private String address;
     private String joindate;
-    private char smsflag;
-    private char emailflag;
+    private String smsflag;
+    private String emailflag;
     private String roles;
 
     public List<String> getRoleList() {

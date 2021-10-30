@@ -36,14 +36,20 @@ public class LoginController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/user/user")
-    public String user(Authentication authentication) {
-        PrincipalDetail principal = (PrincipalDetail) authentication.getPrincipal();
-        System.out.println("authentication: " + principal.getUsername());
+    public String user() {
         return "user";
     }
+//    @GetMapping("/user/user")
+//    public String user(Authentication authentication) {
+//        PrincipalDetail principal = (PrincipalDetail) authentication.getPrincipal();
+//        System.out.println("authentication: " + principal.getUsername());
+//        return "user";
+//    }
 
     @GetMapping("/manager/user")
-    public String manager() {
+    public String manager(Authentication authentication) {
+        PrincipalDetail principal = (PrincipalDetail) authentication.getPrincipal();
+        System.out.println("authentication: " + principal.getUsername());
         return "manager";
     }
 

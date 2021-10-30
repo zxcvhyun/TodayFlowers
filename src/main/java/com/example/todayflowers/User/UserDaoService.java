@@ -56,4 +56,28 @@ public class UserDaoService {
         }
         return null;
     }
+
+    //마이페이지 회원정보 수정
+    public User myPageUpdate(String useremail, String phnumber, String address, String smsflag, String emailflag ) {
+        User userEntity = userRepository.findByUseremail(useremail);
+        if (userEntity != null) {
+            System.out.println("myPageupdate UserEntity : " + userEntity);
+            if (phnumber != null) {
+                userEntity.setPhnumber(phnumber);
+            }
+            if (address != null) {
+                userEntity.setAddress(address);
+            }
+            if (smsflag != null) {
+                userEntity.setSmsflag(smsflag);
+            }
+            if (emailflag != null) {
+                userEntity.setEmailflag(emailflag);
+            }
+            userRepository.save(userEntity);
+            System.out.println("수정됨: " + userEntity.getUseremail() + userEntity.getPhnumber() + userEntity.getAddress());
+            return userEntity;
+        }
+        return null;
+    }
 }
